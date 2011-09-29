@@ -237,7 +237,7 @@ class LcgFileCatalogClient( FileCatalogueBase ):
             lfcPerm['Write'] = ( perms & 2 ) != 0
             lfcPerm['Read'] = ( perms & 4 ) != 0
             lfcPerm['Execute'] = ( perms & 1 ) != 0
-            print 'DEBUG: lfcPerm: ', lfcPerm
+            print 'DEBUG: Finally lfcPerm: ', lfcPerm
             successful[path] = lfcPerm
 
     if created:
