@@ -224,11 +224,13 @@ class LcgFileCatalogClient( FileCatalogueBase ):
               if vomsRole.endswith( lfcPerm['Role'] ):
                 groupMatch = True
             if ( lfcPerm['DN'] in clientInfo['AllDNs'] ):
+              print 'DEBUG: DN returned by LFC matches proxy DN'
               if groupMatch:
                 perms = lfcPerm['user']
               else:
                 perms = lfcPerm['world']
             else:
+              print 'DEBUG: DN returned by LFC does NOT match proxy DN'
               if groupMatch:
                 perms = lfcPerm['group']
               else:
