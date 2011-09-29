@@ -212,11 +212,13 @@ class LcgFileCatalogClient( FileCatalogueBase ):
         else:
           # Evaluate access rights
           lfcPerm = res['Value']
+          print 'DEBUG: lfcPerm: ', lfcPerm
           resClient = self.__getClientCertInfo()
           if not resClient['OK']:
             failed[path] = resClient['Message']
           else:
             clientInfo = resClient['Value']
+            print 'DEBUG: clientInfo: ', clientInfo
             groupMatch = False
             for vomsRole in clientInfo['Role']:
               if vomsRole.endswith( lfcPerm['Role'] ):
@@ -235,7 +237,7 @@ class LcgFileCatalogClient( FileCatalogueBase ):
             lfcPerm['Write'] = ( perms & 2 ) != 0
             lfcPerm['Read'] = ( perms & 4 ) != 0
             lfcPerm['Execute'] = ( perms & 1 ) != 0
-
+            print 'DEBUG: lfcPerm: ', lfcPerm
             successful[path] = lfcPerm
 
     if created:
