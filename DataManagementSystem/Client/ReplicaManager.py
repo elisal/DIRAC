@@ -916,17 +916,17 @@ class ReplicaManager( CatalogToStorage ):
       return res
 
     paths = path
-    if type(path) in types.StringTypes:
+    if type( path ) in types.StringTypes:
       paths = [path]
 
     for p in paths:
       if not res['Value']['Successful'].has_key( p ):
-        return S_OK(False)
+        return S_OK( False )
       catalogPerm = res['Value']['Successful'][p]
       if not ( catalogPerm.has_key( 'Write' ) and catalogPerm['Write'] ):
-        return S_OK(False)
+        return S_OK( False )
 
-    return S_OK(True)
+    return S_OK( True )
 
   ##########################################################################
   #
@@ -1775,10 +1775,12 @@ class ReplicaManager( CatalogToStorage ):
     gLogger.verbose( "ReplicaManager.removeFile: Attempting to remove %s files from Storage and Catalogue." % len( lfns ) )
     gLogger.verbose( "ReplicaManager.removeFile: Attempting to obtain replicas for %s lfns." % len( lfns ) )
     res = self.fileCatalogue.exists( lfns )
+    print( "DEBUG result of fileCatalogue.exists %s " % res )
     if not res['OK']:
       errStr = "ReplicaManager.removeFile: Completely failed to determine existance of lfns."
       gLogger.error( errStr, res['Message'] )
       return res
+    print( "DEBUG File exists in lfc .." )
     successful = {}
     existingFiles = []
     for lfn, exists in res['Value']['Successful'].items():
