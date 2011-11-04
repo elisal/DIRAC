@@ -11,26 +11,34 @@ __RCSID__ = "$Id$"
 import DIRAC
 from DIRAC.Core.Base import Script
 
+verbose = False
+FCCheck = True
+Script.registerSwitch( "v", "Verbose", " use this option for verbose output [False]" )
+Script.registerSwitch( "n", "NoLFC", " use this option to force the removal from storage of replicas not registered in FC [by default, replicas not registered are NOT removed from storage]" )
+
 Script.setUsageMessage( '\n'.join( [ __doc__.split( '\n' )[1],
                                      'Usage:',
-                                     '  %s [option|cfgfile] ... LFN SE [FCCheck]' % Script.scriptName,
+                                     '  %s [option|cfgfile] ... LFN SE ' % Script.scriptName,
                                      'Arguments:',
                                      '  LFN:      Logical File Name or file containing LFNs',
-                                     '  SE:       Valid DIRAC SE',
-                                     '  FCCheck:  Check replica existence in FC, possible values: YESLFC/NOLFC [default is YESLFC]' ] ) )
+                                     '  SE:       Valid DIRAC SE' ] ) )
 Script.parseCommandLine( ignoreErrors = True )
 args = Script.getPositionalArgs()
 
 if len( args ) < 2:
   Script.showHelp()
 
-FCCheck = 'YESLFC'
 if len( args ) > 2:
   FCCheck = args[ 2 ]
-  #print 'Only one LFN SE pair will be considered'
-  if FCCheck != 'YESLFC' and FCCheck != 'NOLFC':
-    print( "Invalid value: %s Only possible values for FCCheck are YESLFC or NOLFC" % FCCheck )
-    Script.showHelp()
+  print 'Only one LFN SE pair will be considered'
+  Script.showHelp()
+
+switches = Script.getUnprocessedSwitches()
+for switch in switches:
+  if switch[0] == "v" or switch[0].lower() == "verbose":
+    verbose = True
+  if switch[0] == "n" or switch[0].lower() == "nolfc":
+    FCCheck = False
 
 from DIRAC.Interfaces.API.Dirac                       import Dirac
 dirac = Dirac()
@@ -45,7 +53,7 @@ try:
   f.close()
 except:
   lfns = [lfn]
-if FCCheck == 'NOLFC':
+if not FCCheck:
   successRemoved = []
   failedRemoved = []
   print 'WARNING: removing physical replica from storage, without removing entry in the FC'
@@ -75,9 +83,10 @@ if FCCheck == 'NOLFC':
     failed = res['Value']['Failed']
     for file in failed:
       failedRemoved.append( file )
-  print 'Summary:'
-  print 'Successfully removed: ', successRemoved
-  print 'Failed to remove: ', failedRemoved
+  if verbose:
+    print 'Summary:'
+    print 'Successfully removed: ', successRemoved
+    print 'Failed to remove: ', failedRemoved
 else:
   for lfn in lfns:
     result = dirac.removeReplica( lfn, seName, printOutput = True )
