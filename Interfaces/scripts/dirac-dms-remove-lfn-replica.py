@@ -60,7 +60,6 @@ if FCCheck == 'NOLFC':
       print 'WARNING: file is registered in FC! it will NOT be removed from storage! ', res
       continue
 
-    print 'MYDEBUG: getReplicaIsFile returned ', res
     res = se.getPfnForLfn( lfn )
     if not res['OK']:
       print 'ERROR: ', result['Message']
