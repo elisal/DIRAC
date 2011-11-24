@@ -73,10 +73,14 @@ if not FCCheck:
       print 'ERROR: ', result['Message']
       continue
     surl = res[ 'Value']
+    if verbose:
+      print "Removing surl: ", surl
     res = rm.removeStorageFile( surl, seName )
     if not res['OK']:
       print 'ERROR: ', res['Message']
       continue
+    if verbose:
+      print "ReplicaManager.removeStorageFile returned: ", res
     success = res['Value']['Successful']
     for file in success.keys():
       successRemoved.append( file )
