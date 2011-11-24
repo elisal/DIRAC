@@ -28,7 +28,6 @@ class CLIParams:
   userPasswd = ""
   checkClock = True
 
-
   def setProxyLifeTime( self, arg ):
     try:
       fields = [ f.strip() for f in arg.split( ":" ) ]
