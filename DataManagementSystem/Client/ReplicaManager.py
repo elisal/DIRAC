@@ -916,17 +916,17 @@ class ReplicaManager( CatalogToStorage ):
       return res
 
     paths = path
-    if type(path) in types.StringTypes:
+    if type( path ) in types.StringTypes:
       paths = [path]
 
     for p in paths:
       if not res['Value']['Successful'].has_key( p ):
-        return S_OK(False)
+        return S_OK( False )
       catalogPerm = res['Value']['Successful'][p]
       if not ( catalogPerm.has_key( 'Write' ) and catalogPerm['Write'] ):
-        return S_OK(False)
+        return S_OK( False )
 
-    return S_OK(True)
+    return S_OK( True )
 
   ##########################################################################
   #
@@ -1910,7 +1910,7 @@ class ReplicaManager( CatalogToStorage ):
     for pfn, error in res['Value']['Failed'].items():
       failed[pfnDict[pfn]] = error
     replicaTuples = []
-    for pfn,surl in res['Value']['Successful'].items():
+    for pfn, surl in res['Value']['Successful'].items():
       replicaTuple = ( pfnDict[pfn], surl, storageElementName )
       replicaTuples.append( replicaTuple )
     successful = {}
@@ -2081,7 +2081,7 @@ class ReplicaManager( CatalogToStorage ):
       gDataStoreClient.addRegister( oDataOperation )
       infoStr = "ReplicaManager.__removePhysicalReplica: Successfully issued accounting removal request."
       gLogger.info( infoStr )
-      for surl,value in res['Value']['Successful'].items():
+      for surl, value in res['Value']['Successful'].items():
         ret = storageElement.getPfnForProtocol( surl, self.registrationProtocol, withPort = False )
         if not ret['OK']:
           res['Value']['Successful'][surl] = surl
