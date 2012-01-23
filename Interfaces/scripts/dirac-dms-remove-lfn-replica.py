@@ -62,12 +62,16 @@ if not FCCheck:
   from DIRAC.DataManagementSystem.Client.ReplicaManager import ReplicaManager
   rm = ReplicaManager()
   for lfn in lfns:
-    # check if it is registered in LFC
+    if verbose:
+      print 'Check if replica is registered in FC..'
     res = rm.getReplicaIsFile( lfn, seName )
     if res['OK']:
       print 'WARNING: file is registered in FC! it will NOT be removed from storage! ', res
       continue
-
+    if verbose:
+      print 'Replica NOT registered in FC. OK: can proceed removing physical file..'
+    if verbose:
+      print 'Get the PFN:'
     res = se.getPfnForLfn( lfn )
     if not res['OK']:
       print 'ERROR: ', result['Message']
@@ -87,10 +91,14 @@ if not FCCheck:
     failed = res['Value']['Failed']
     for file in failed:
       failedRemoved.append( file )
-  if verbose:
-    print 'Summary:'
-    print 'Successfully removed: ', successRemoved
-    print 'Failed to remove: ', failedRemoved
+
+  print 'Summary:'
+  print 'Successfully removed: ', len( successRemoved ), ' replicas: '
+  for rep in successRemoved:
+    print 'REMOVED: ', rep
+  print 'Failed to remove: ', len( failedRemoved ), ' replicas: '
+  for rep in failedRemoved:
+    print 'FAILED TO REMOVE: ', rep
 else:
   for lfn in lfns:
     result = dirac.removeReplica( lfn, seName, printOutput = True )
