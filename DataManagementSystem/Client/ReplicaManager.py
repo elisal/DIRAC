@@ -418,10 +418,12 @@ class StorageBase:
     gLogger.debug( "ReplicaManager._executeStorageElementFunction: Attempting to perform '%s' operation with %s pfns." % ( method, len( pfns ) ) )
     # Check we can instantiate the storage element correctly
     overwride = False
-    if method  in ['removeFile', 'removeDirectory']:
-      overwride = True
+    #if method  in ['removeFile', 'removeDirectory']:
+    #  overwride = True
+    print 'MYDEBUG: ReplicaManager: instantiate se ', storageElementName
     storageElement = StorageElement( storageElementName, overwride = overwride )
     res = storageElement.isValid( method )
+    print 'MYDEBUG: replicaManager: isValid returned : ', res
     if not res['OK']:
       errStr = "ReplicaManager._executeStorageElementFunction: Failed to instantiate Storage Element"
       gLogger.error( errStr, "for performing %s at %s." % ( method, storageElementName ) )
