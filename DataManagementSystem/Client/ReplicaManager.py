@@ -418,12 +418,10 @@ class StorageBase:
     gLogger.debug( "ReplicaManager._executeStorageElementFunction: Attempting to perform '%s' operation with %s pfns." % ( method, len( pfns ) ) )
     # Check we can instantiate the storage element correctly
     overwride = False
-    #if method  in ['removeFile', 'removeDirectory']:
-    #  overwride = True
-    print 'MYDEBUG: ReplicaManager: instantiate se ', storageElementName
+    if method  in ['removeFile', 'removeDirectory']:
+      overwride = True
     storageElement = StorageElement( storageElementName, overwride = overwride )
     res = storageElement.isValid( method )
-    print 'MYDEBUG: replicaManager: isValid returned : ', res
     if not res['OK']:
       errStr = "ReplicaManager._executeStorageElementFunction: Failed to instantiate Storage Element"
       gLogger.error( errStr, "for performing %s at %s." % ( method, storageElementName ) )
@@ -2065,7 +2063,7 @@ class ReplicaManager( CatalogToStorage ):
 
   def __removePhysicalReplica( self, storageElementName, pfnsToRemove ):
     gLogger.verbose( "ReplicaManager.__removePhysicalReplica: Attempting to remove %s pfns at %s." % ( len( pfnsToRemove ), storageElementName ) )
-    storageElement = StorageElement( storageElementName, overwride = True )
+    storageElement = StorageElement( storageElementName )
     res = storageElement.isValid()
     if not res['OK']:
       errStr = "ReplicaManager.__removePhysicalReplica: The storage element is not currently valid."
