@@ -1221,13 +1221,17 @@ class LcgFileCatalogClient( FileCatalogueBase ):
 
   def __getFileReplicas( self, lfn, allStatus ):
     fullLfn = '%s%s' % ( self.prefix, lfn )
-    value, replicaObjects = lfc.lfc_getreplica( fullLfn, '', '' )
+    #value, replicaObjects = lfc.lfc_getreplica( fullLfn, '', '' )
+    fullLfn = [ fullLfn ]
+    value, replicaObjects = lfc.lfc_getreplicasl( fullLfn, '' )
     if value != 0:
       return S_ERROR( lfc.sstrerror( lfc.cvar.serrno ) )
     replicas = {}
     if not replicaObjects:
       return S_ERROR( 'File has zero replicas' )
+    print "MYDEBUG:  replicaObjects: ", replicaObjects
     for replica in replicaObjects:
+      print "MYDEBUG: replica is " , replica
       status = replica.status
       if ( status != 'P' ) or allStatus:
         se = replica.host
